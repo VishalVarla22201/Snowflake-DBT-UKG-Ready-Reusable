@@ -9,7 +9,8 @@
         materialized='incremental',
         incremental_strategy='delete+insert',
         unique_key='employee_date_key',
-        on_schema_change='sync_all_columns'
+        on_schema_change='sync_all_columns',
+        post_hook="{{ delete_rows_missing_upstream('stg__ukg_ready__time_entries', 'payroll_workhours_key', 'time_entry_key') }}"
     )
 }}
 

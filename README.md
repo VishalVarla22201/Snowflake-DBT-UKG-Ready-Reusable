@@ -23,6 +23,7 @@ Databases (see `dbt_project.yml`):
 - `snapshots/silver/` – SCD type 2 snapshots (`scd__ukg_ready__*`, SQL + YAML) of 6 staging models, strategy `timestamp` on `_fivetran_synced`, `hard_deletes: invalidate`, schema `SILVER`. Run with `dbt snapshot`.
 - `models/gold/` – 11 dimension/fact models, schema `GOLD`; model names equal the original table names.
 - `macros/generate_schema_name.sql` – uses `SILVER`/`GOLD` verbatim.
+- `macros/incremental_watermark.sql`, `macros/delete_rows_missing_upstream.sql`, `macros/soft_delete_rows_missing_upstream.sql` – watermark, hard-delete and soft-delete propagation for the incremental gold models (`dim_hr_employee` keeps deleted employees with `is_deleted` / `deleted_date`).
 
 ## Surrogate keys
 All keys use `dbt_utils.generate_surrogate_key` on the table's id column(s); original ids are kept.

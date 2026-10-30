@@ -3,7 +3,12 @@
         materialized='incremental',
         incremental_strategy='merge',
         unique_key='employee_key',
-        on_schema_change='sync_all_columns'
+        on_schema_change='sync_all_columns',
+        full_refresh=false,
+        post_hook=[
+            "{{ mark_rows_deleted_upstream('stg__ukg_ready__employees', 'employee_key') }}",
+            "{{ restore_rows_present_upstream('stg__ukg_ready__employees', 'employee_key') }}"
+        ]
     )
 }}
 
@@ -92,6 +97,8 @@ select
     weekly_hours,
     date_time_changed,
     gold_load_date,
+    'N' as is_deleted,
+    cast(null as timestamp_ntz) as deleted_date,
     _fivetran_synced
 from source s
 {% if is_incremental() %}

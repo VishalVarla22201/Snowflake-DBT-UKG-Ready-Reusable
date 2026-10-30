@@ -8,7 +8,8 @@
         materialized='incremental',
         incremental_strategy='delete+insert',
         unique_key='employee_date_key',
-        on_schema_change='sync_all_columns'
+        on_schema_change='sync_all_columns',
+        post_hook="{{ delete_rows_missing_upstream('fact_payroll_workhours', 'payroll_workhours_key') }}"
     )
 }}
 

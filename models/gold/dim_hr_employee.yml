@@ -70,5 +70,14 @@ models:
         description: Not available in source; always null.
       - name: gold_load_date
         description: Timestamp the row was loaded into the gold layer.
+      - name: is_deleted
+        description: "Y when the employee no longer exists upstream (deleted in Fivetran), otherwise N. Deleted employees are kept, not removed."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["Y", "N"]
+      - name: deleted_date
+        description: Timestamp (timestamp_ntz) of the run that first flagged the employee as deleted; null while is_deleted is N.
       - name: _fivetran_synced
         description: Latest Fivetran sync timestamp across the source tables feeding the row (timestamp_ntz); incremental watermark.

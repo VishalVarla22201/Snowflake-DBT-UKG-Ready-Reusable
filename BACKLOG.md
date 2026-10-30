@@ -16,6 +16,7 @@ Branch: `feature/modifying-scipts-vv`
 | 7 | Incremental gold models | `dim_hr_company` and `dim_hr_employee` (merge); `fact_payroll_workhours` and `fact_employee_salary_details` (delete+insert on new `employee_date_key`); watermark macro with a 1 hour lookback (`incremental_lookback_hours`) |
 | 8 | `staging/` subfolder | Silver staging models and their YAML moved to `models/silver/staging/`; renamed to `stg__ukg_ready__<source table>` |
 | 9 | SCD type 2 snapshots | `snapshots/silver/scd__ukg_ready__*`: SQL snapshot blocks plus a YAML file each for 6 staging models; strategy `timestamp` on `_fivetran_synced`, `hard_deletes=invalidate`, `dbt_valid_to_current` = `9999-12-31` (current dbt config names) |
+| 10 | Propagate deletes into incremental gold (was B9) | Post-hook macro `delete_rows_missing_upstream` removes rows whose key is gone upstream: `dim_hr_company`, `fact_payroll_workhours` (vs staging), `fact_employee_salary_details` (vs the fact). `dim_hr_employee` is soft-deleted instead: `is_deleted` Y/N plus `deleted_date`, cleared again if the employee returns; `full_refresh=false` protects that history |
 
 ## Backlog
 
@@ -29,13 +30,13 @@ Branch: `feature/modifying-scipts-vv`
 | B6 | Document sources per table | `models/sources.yml` | Add table and column descriptions; add `freshness` with `loaded_at_field: _fivetran_synced` | Low |
 | B7 | Move to the staging / intermediate / marts layering | project structure | Optional: bring the folder layout and naming (`stg_`, `int_`) in line with the dbt style guide if the project grows | Low |
 | B8 | Switch to `import CTE -> logical CTEs -> final` layout | all models | Put all `ref` / `source` calls in import CTEs at the top and end every model with a `final` CTE | Low |
-| B9 | Propagate deletes into incremental gold models | `dim_hr_company`, `dim_hr_employee`, `fact_payroll_workhours`, `fact_employee_salary_details` | Silver drops `_fivetran_deleted` rows, but incremental models never remove rows already loaded. Add a scheduled `--full-refresh`, or a delete step that removes target rows missing from silver | High |
 | B10 | One-time full refresh when switching to incremental | the four incremental models | The existing tables lack `_fivetran_synced` and `employee_date_key`; run `dbt build --full-refresh` once per environment | High |
 | B11 | Decide on incremental for the remaining gold models | `dim_hr_department`, `dim_hr_location`, `dim_job`, `dim_salary_code`, three mapping dims | Kept as tables: hierarchy changes move descendants without touching their rows, `dim_salary_code` is static and the mapping tables are manual with no Fivetran columns. Revisit if volumes grow | Low |
 | B12 | Silver models stay full-refresh tables | all silver models | They re-read the whole raw table each run; make them incremental on `_fivetran_synced` if raw volumes grow | Low |
 | B13 | Verify Fivetran column names | silver import CTEs | Confirm the Fivetran tables expose the exact columns listed, including `_fivetran_synced` and `_fivetran_deleted`; first `dbt build` will fail with an invalid identifier if not | High |
 | B14 | Materialise staging models as views | `models/silver/staging/` | Staging models are `table` today (project default); the dbt style guide uses views. Snapshots read from them, so check cost before switching | Low |
 | B15 | Snapshot `time_entries` and downstream use of history | `stg__ukg_ready__time_entries`, gold | Not snapshotted: transactional rows, large, and their key already includes the extraction window. Also decide whether gold dims should read the snapshots (point-in-time joins) | Low |
+| B16 | Older extraction window not restored after a delete | `fact_payroll_workhours` | If the latest window of an employee/day is deleted in Fivetran, its rows are removed but an older window for that day only becomes current again after a full refresh. Fix by also adding such days to `changed_days` | Low |
 
 ## Notes
 

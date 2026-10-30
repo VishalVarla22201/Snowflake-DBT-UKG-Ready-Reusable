@@ -3,7 +3,8 @@
         materialized='incremental',
         incremental_strategy='merge',
         unique_key='company_key',
-        on_schema_change='sync_all_columns'
+        on_schema_change='sync_all_columns',
+        post_hook="{{ delete_rows_missing_upstream('stg__ukg_ready__lookup_eins', 'company_key') }}"
     )
 }}
 
