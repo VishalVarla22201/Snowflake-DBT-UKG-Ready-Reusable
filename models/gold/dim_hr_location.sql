@@ -1,3 +1,6 @@
+{#- Kept as a table (not incremental): the table is tiny and a parent moving to another level changes its descendants' levels without touching their rows, so a _fivetran_synced watermark cannot detect it. -#}
+{{ config(materialized='table') }}
+
 with recursive org_hierarchy as (
     select id, name, parent_id, 1 as level
     from {{ ref('stg__ukg_ready__cost_centers_store') }}
@@ -14,4 +17,4 @@ select distinct
     name as location_name,
     current_timestamp()::timestamp_ntz as gold_load_date
 from org_hierarchy
-where level = 3
+where level = {{ var('location_hierarchy_level') }}

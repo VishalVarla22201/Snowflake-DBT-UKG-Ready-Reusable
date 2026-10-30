@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: dim_hr_department
-    description: Department dimension (level 4 of the organisation cost-center hierarchy).
+    description: Department dimension (level set by var department_hierarchy_level, 4, of the organisation cost-center hierarchy).
     columns:
       - name: department_key
         description: Surrogate key on dim_department_id.

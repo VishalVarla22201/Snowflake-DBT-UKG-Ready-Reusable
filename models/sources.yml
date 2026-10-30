@@ -2,23 +2,204 @@ version: 2
 
 sources:
   - name: ukg_ready
-    description: Raw UKG Ready extracts landed in Snowflake.
+    description: Raw UKG Ready extracts landed in Snowflake by Fivetran.
     database: fivetrandb
     schema: ukg_ready
+    config:
+      loaded_at_field: _fivetran_synced
+      freshness:
+        warn_after: {count: 24, period: hour}
+        error_after: {count: 48, period: hour}
     tables:
       - name: COMPENSATION_HISTORY
+        description: Compensation records per employee account, one row per record.
+        columns:
+          - name: id
+            description: Compensation record id.
+          - name: employee_account_id
+            description: UKG Ready employee account id the record belongs to.
+          - name: effective_from
+            description: Date from which the record is effective.
+          - name: amount
+            description: Pay amount for the period in amount_period.
+          - name: hourly_pay
+            description: Hourly pay rate.
+          - name: amount_period
+            description: Period the amount applies to (e.g. HOUR, YEAR).
+          - name: time
+            description: Scheduled working time in milliseconds for the period in time_period.
+          - name: time_period
+            description: Period the scheduled time applies to.
+          - name: num_pp_in_year
+            description: Number of pay periods in a year.
+          - name: currency
+            description: Currency code.
+          - name: _fivetran_synced
+            description: Time Fivetran last synced the row.
+          - name: _fivetran_deleted
+            description: True when the row was deleted in the source.
+
       - name: COST_CENTERS_ORG
+        description: Organisation cost-center hierarchy (jobs / departments).
+        columns:
+          - name: id
+            description: Cost-center id.
+          - name: parent_id
+            description: Parent cost-center id; null for the root level.
+          - name: name
+            description: Cost-center name.
+          - name: _fivetran_synced
+            description: Time Fivetran last synced the row.
+          - name: _fivetran_deleted
+            description: True when the row was deleted in the source.
+
       - name: COST_CENTERS_STORE
+        description: Store cost-center hierarchy (locations).
+        columns:
+          - name: id
+            description: Store cost-center id.
+          - name: parent_id
+            description: Parent cost-center id; null for the root level.
+          - name: name
+            description: Cost-center name.
+          - name: _fivetran_synced
+            description: Time Fivetran last synced the row.
+          - name: _fivetran_deleted
+            description: True when the row was deleted in the source.
+
       - name: EMPLOYEE_DETAILS
+        description: Employee to job and store cost-center assignment.
+        columns:
+          - name: id
+            description: Employee id.
+          - name: cost_center_job_id
+            description: Job cost-center id assigned to the employee.
+          - name: cost_center_store_id
+            description: Store cost-center id assigned to the employee.
+          - name: _fivetran_synced
+            description: Time Fivetran last synced the row.
+          - name: _fivetran_deleted
+            description: True when the row was deleted in the source.
+
       - name: EMPLOYEES
+        description: Employee master.
+        columns:
+          - name: id
+            description: Employee id.
+          - name: employee_id
+            description: Business employee identifier (employee number).
+          - name: primary_account_id
+            description: Primary account id of the employee.
+          - name: ein_name
+            description: Name of the employer identification number (company) the employee belongs to.
+          - name: status
+            description: Employment status.
+          - name: dates_hired
+            description: Hire date.
+          - name: dates_started
+            description: Start date.
+          - name: dates_terminated
+            description: Termination date, if applicable.
+          - name: _fivetran_synced
+            description: Time Fivetran last synced the row.
+          - name: _fivetran_deleted
+            description: True when the row was deleted in the source.
+
       - name: LOOKUP_EINS
+        description: Employer identification numbers (companies).
+        columns:
+          - name: id
+            description: EIN id.
+          - name: ein_name
+            description: Company name registered for the EIN.
+          - name: ein_tax_id
+            description: Employer tax id.
+          - name: ein_country_id
+            description: Country id of the EIN.
+          - name: _fivetran_synced
+            description: Time Fivetran last synced the row.
+          - name: _fivetran_deleted
+            description: True when the row was deleted in the source.
+
       - name: TIME_ENTRIES
+        description: Time entries flattened per entry, cost-center line and extraction window.
+        columns:
+          - name: start_date
+            description: Start of the extraction window.
+          - name: end_date
+            description: End of the extraction window.
+          - name: employee_account_id
+            description: Employee account id.
+          - name: time_entries_id
+            description: Time entry id.
+          - name: time_entries_date
+            description: Date of the time entry.
+          - name: time_entries_start_time
+            description: Clock-in time.
+          - name: time_entries_end_time
+            description: Clock-out time.
+          - name: time_entries_type
+            description: Type of the time entry.
+          - name: time_entries_approval_status
+            description: Approval status of the time entry.
+          - name: time_entries_calc_start_time
+            description: Calculated start time.
+          - name: time_entries_calc_end_time
+            description: Calculated end time.
+          - name: time_entries_calc_total
+            description: Calculated total duration in milliseconds.
+          - name: time_entries_total
+            description: Total duration in milliseconds.
+          - name: time_entries_is_calc
+            description: Whether the entry is a calculated entry.
+          - name: time_entries_is_raw
+            description: Whether the entry is a raw entry.
+          - name: time_entries_time_off_id
+            description: Time-off id when the entry is a time-off entry; otherwise null.
+          - name: time_entries_cost_centers_index
+            description: Index of the cost-center line within the time entry.
+          - name: time_entries_cost_centers_value_id
+            description: Cost-center id of the line.
+          - name: _fivetran_synced
+            description: Time Fivetran last synced the row.
+          - name: _fivetran_deleted
+            description: True when the row was deleted in the source.
 
   - name: manual
-    description: Manually maintained mapping tables feeding the gold mapping dimensions.
+    description: Manually maintained mapping tables feeding the gold mapping dimensions. No freshness check, they are edited by hand.
     database: "{{ var('mapping_database') }}"
     schema: manual
     tables:
       - name: department_mapping
+        description: Mapping between target departments and HR departments.
+        columns:
+          - name: dim_department_id
+            description: Target department id.
+          - name: department_name
+            description: Target department name.
+          - name: dim_hr_department_id
+            description: HR department id.
+          - name: hr_department_name
+            description: HR department name.
       - name: hr_location_mapping
+        description: Mapping between target locations and HR locations.
+        columns:
+          - name: dim_location_id
+            description: Target location id.
+          - name: location_name
+            description: Target location name.
+          - name: dim_hr_location_id
+            description: HR location id.
+          - name: hr_location_name
+            description: HR location name.
       - name: subsidiary_mapping
+        description: Mapping between subsidiaries and companies.
+        columns:
+          - name: dim_subsidiary_id
+            description: Subsidiary id.
+          - name: subsidiary_name
+            description: Subsidiary name.
+          - name: company_name
+            description: Company name.
+          - name: dim_company_id
+            description: Company (EIN) id.

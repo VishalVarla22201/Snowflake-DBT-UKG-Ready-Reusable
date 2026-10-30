@@ -145,7 +145,7 @@ base_source as (
     left join latest_comp lc
         on te.employee_account_id = lc.employee_account_id
         and te.time_entries_date >= lc.effective_from
-        and te.time_entries_date < coalesce(lc.effective_till, '2050-01-01')
+        and te.time_entries_date < coalesce(lc.effective_till, '{{ var('far_future_date') }}')
 )
 
 select

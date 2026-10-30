@@ -18,11 +18,12 @@ Databases (see `dbt_project.yml`):
 - **Silver / gold / mapping tables:** `DEV_DB` for any target except `prod`; `PROD_DB` when run with `--target prod`.
 
 ## Layout
-- `models/sources.yml` – raw UKG tables + the 3 manual mapping tables (source `manual`, schema `manual`).
-- `models/silver/staging/` – 7 staging models (`stg__ukg_ready__*`), schema `SILVER`.
+- `models/sources.yml` – raw UKG tables (with freshness on `_fivetran_synced`; check with `dbt source freshness`) + the 3 manual mapping tables (source `manual`, schema `manual`).
+- `models/silver/` – 7 staging views (`stg__ukg_ready__*`), schema `SILVER`; they filter Fivetran-deleted rows.
 - `snapshots/silver/` – SCD type 2 snapshots (`scd__ukg_ready__*`, SQL + YAML) of 6 staging models, strategy `timestamp` on `_fivetran_synced`, `hard_deletes: invalidate`, schema `SILVER`. Run with `dbt snapshot`.
 - `models/gold/` – 11 dimension/fact models, schema `GOLD`; model names equal the original table names.
 - `macros/generate_schema_name.sql` – uses `SILVER`/`GOLD` verbatim.
+- Project variables in `dbt_project.yml`: `incremental_lookback_hours`, `far_future_date`, `department_hierarchy_level`, `location_hierarchy_level`.
 - `macros/incremental_watermark.sql`, `macros/delete_rows_missing_upstream.sql`, `macros/soft_delete_rows_missing_upstream.sql` – watermark, hard-delete and soft-delete propagation for the incremental gold models (`dim_hr_employee` keeps deleted employees with `is_deleted` / `deleted_date`).
 
 ## Surrogate keys

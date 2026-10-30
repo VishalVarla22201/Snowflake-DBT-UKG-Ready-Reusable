@@ -1,3 +1,6 @@
+{#- Kept as a table (not incremental): static list of earning types with no source table, so there is nothing to load incrementally. -#}
+{{ config(materialized='table') }}
+
 select
     {{ dbt_utils.generate_surrogate_key(['dim_earning_id']) }} as earning_key,
     dim_earning_id,

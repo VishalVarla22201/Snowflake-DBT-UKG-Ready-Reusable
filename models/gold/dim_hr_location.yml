@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: dim_hr_location
-    description: Location dimension (level 3 of the store cost-center hierarchy).
+    description: Location dimension (level set by var location_hierarchy_level, 3, of the store cost-center hierarchy).
     columns:
       - name: location_key
         description: Surrogate key on dim_location_id.

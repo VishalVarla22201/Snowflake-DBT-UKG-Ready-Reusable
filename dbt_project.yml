@@ -14,6 +14,11 @@ clean-targets: ["target", "dbt_packages"]
 vars:
   # Hours re-read before the incremental watermark (see macros/incremental_watermark.sql)
   incremental_lookback_hours: 1
+  # Open-ended end date for the latest compensation record (fact_payroll_workhours)
+  far_future_date: "2050-01-01"
+  # Cost-center hierarchy level that holds departments / locations (dim_hr_department, dim_hr_location)
+  department_hierarchy_level: 4
+  location_hierarchy_level: 3
   # Database holding the 'manual' schema with hand-maintained mapping tables (source 'manual');
   # follows the environment like the models: PROD_DB for the 'prod' target, otherwise DEV_DB
   mapping_database: "{{ 'PROD_DB' if target.name == 'prod' else 'DEV_DB' }}"
@@ -25,6 +30,7 @@ models:
     +materialized: table
     silver:
       +schema: SILVER
+      +materialized: view
       +tags: ['silver', 'ukg_ready']
     gold:
       +schema: GOLD

@@ -1,3 +1,6 @@
+{#- Kept as a table (not incremental): the source is a manually maintained table with no _fivetran_synced column to use as a watermark, and it is small. -#}
+{{ config(materialized='table') }}
+
 with source as (
     select
         dim_subsidiary_id,

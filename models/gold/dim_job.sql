@@ -1,3 +1,6 @@
+{#- Kept as a table (not incremental): the table is tiny, job_title comes from the parent row and the leaf test depends on every other row, so a change to one row can alter others that a watermark would not pick up. -#}
+{{ config(materialized='table') }}
+
 select
     {{ dbt_utils.generate_surrogate_key(['job.id']) }} as job_key,
     job.id as dim_job_id,
