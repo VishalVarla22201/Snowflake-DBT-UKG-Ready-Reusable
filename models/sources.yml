@@ -1,0 +1,24 @@
+version: 2
+
+sources:
+  - name: ukg_ready
+    description: Raw UKG Ready extracts landed in Snowflake.
+    database: "{{ var('raw_database') }}"
+    schema: "{{ var('raw_schema') }}"
+    tables:
+      - name: COMPENSATION_HISTORY
+      - name: COST_CENTERS_ORG
+      - name: COST_CENTERS_STORE
+      - name: EMPLOYEE_DETAILS
+      - name: EMPLOYEES
+      - name: LOOKUP_EINS
+      - name: TIME_ENTRIES
+
+  - name: manual
+    description: Manually maintained Wagway mapping tables feeding the gold mapping dimensions.
+    database: "{{ var('mapping_database') }}"
+    schema: manual
+    tables:
+      - name: wagway_department_mapping
+      - name: wagway_hr_location_mapping
+      - name: wagway_subsidiary_mapping

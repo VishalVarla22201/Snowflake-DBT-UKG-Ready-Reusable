@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: ukg_ready_compensation_history
+    description: Cleaned compensation history per employee account.
+    columns:
+      - name: compensation_history_key
+        description: Surrogate key (dbt_utils) on id.
+        data_tests: [unique, not_null]
+      - name: employee_key
+        description: Surrogate key on employee_account_id; joins to ukg_ready_employees.employee_key.
+
+  - name: ukg_ready_cost_center_org
+    description: Organisation cost-center hierarchy (jobs / departments).
+    columns:
+      - name: cost_center_org_key
+        data_tests: [unique, not_null]
+      - name: parent_cost_center_org_key
+        description: Surrogate key on parent_id.
+
+  - name: ukg_ready_cost_center_store
+    description: Store cost-center hierarchy (locations).
+    columns:
+      - name: cost_center_store_key
+        data_tests: [unique, not_null]
+      - name: parent_cost_center_store_key
+        description: Surrogate key on parent_id.
+
+  - name: ukg_ready_employee_details
+    description: Employee to job/store cost-center assignment.
+    columns:
+      - name: employee_key
+        data_tests: [unique, not_null]
+      - name: cost_center_job_key
+      - name: cost_center_store_key
+
+  - name: ukg_ready_employees
+    description: Cleaned employee master.
+    columns:
+      - name: employee_key
+        description: Surrogate key on id.
+        data_tests: [unique, not_null]
+
+  - name: ukg_ready_lookup_eins
+    description: Employer identification numbers (companies).
+    columns:
+      - name: company_key
+        data_tests: [unique, not_null]
+
+  - name: ukg_ready_time_entries
+    description: Flattened time entries (one row per entry / cost-center line / extraction window).
+    columns:
+      - name: time_entry_key
+        description: Surrogate key on employee_account_id, time_entries_id, cost-center index, start_date, end_date.
+        data_tests: [unique, not_null]
+      - name: employee_key
+      - name: cost_center_key
