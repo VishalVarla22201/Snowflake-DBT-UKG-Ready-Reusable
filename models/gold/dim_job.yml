@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: dim_job
+    description: Job dimension (leaf nodes of the organisation cost-center hierarchy).
+    columns:
+      - name: job_key
+        description: Surrogate key on dim_job_id.
+        data_tests: [unique, not_null]
+      - name: dim_job_id
+        description: UKG Ready cost-center id of the job.
+      - name: job_title
+        description: Job title (name of the parent cost center).
+      - name: gold_load_date
+        description: Timestamp the row was loaded into the gold layer.

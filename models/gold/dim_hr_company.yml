@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: dim_hr_company
+    description: Company (EIN) dimension.
+    columns:
+      - name: company_key
+        description: Surrogate key on dim_company_id.
+        data_tests: [unique, not_null]
+      - name: dim_company_id
+        description: UKG Ready EIN id.
+      - name: company_code
+        description: Company code (not available in source; always null).
+      - name: company_name
+        description: Company name.
+      - name: gold_load_date
+        description: Timestamp the row was loaded into the gold layer.
+      - name: _fivetran_synced
+        description: Latest Fivetran sync timestamp across the source tables feeding the row (timestamp_ntz); incremental watermark.

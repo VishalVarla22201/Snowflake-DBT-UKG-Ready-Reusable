@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: dim_department_mapping
+    description: Manually maintained mapping between target departments and HR departments.
+    columns:
+      - name: department_mapping_key
+        description: Surrogate key on dim_department_id and dim_hr_department_id.
+        data_tests: [not_null]
+      - name: department_key
+        description: Surrogate key on dim_department_id.
+      - name: hr_department_key
+        description: Surrogate key on dim_hr_department_id; joins to dim_hr_department.department_key.
+      - name: dim_department_id
+        description: Target department id (0 when missing).
+      - name: department_name
+        description: Target department name.
+      - name: dim_hr_department_id
+        description: HR department id (0 when missing).
+      - name: hr_department_name
+        description: HR department name.
+      - name: gold_load_date
+        description: Timestamp the row was loaded into the gold layer.

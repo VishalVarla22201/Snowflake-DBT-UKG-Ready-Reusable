@@ -1,0 +1,74 @@
+version: 2
+
+models:
+  - name: dim_hr_employee
+    description: Employee dimension with company, location, job and department attributes.
+    columns:
+      - name: employee_key
+        description: Surrogate key on dim_employee_id.
+        data_tests: [unique, not_null]
+      - name: company_key
+        description: Foreign key to dim_hr_company.
+        data_tests:
+          - relationships:
+              to: ref('dim_hr_company')
+              field: company_key
+              config: {severity: warn}
+      - name: location_key
+        description: Foreign key to dim_hr_location.
+      - name: job_key
+        description: Foreign key to dim_job.
+      - name: department_key
+        description: Foreign key to dim_hr_department.
+      - name: dim_employee_id
+        description: UKG Ready employee id.
+      - name: employee_id
+        description: Primary UKG Ready account id of the employee.
+      - name: hire_source
+        description: Not available in source; always null.
+      - name: employee_status
+        description: Employment status.
+      - name: employee_type
+        description: Part Time when the latest pay period is HOUR, otherwise Full Time.
+      - name: original_hire_date
+        description: Original hire date.
+      - name: hire_date
+        description: Hire date.
+      - name: termination_date
+        description: Termination date, if applicable.
+      - name: termination_reason
+        description: Not available in source; always null.
+      - name: termination_type
+        description: Not available in source; always null.
+      - name: dim_company_id
+        description: Company (EIN) id.
+      - name: dim_location_id
+        description: Location cost-center id.
+      - name: dim_job_id
+        description: Job cost-center id.
+      - name: dim_class_id
+        description: Not available in source; always null.
+      - name: dim_department_id
+        description: Department cost-center id.
+      - name: dim_job_group_id
+        description: Not available in source; always null.
+      - name: supervisor_company_id
+        description: Not available in source; always null.
+      - name: manager_id
+        description: Not available in source; always null.
+      - name: employee_status_reason_code
+        description: Not available in source; always null.
+      - name: job_function
+        description: Not available in source; always null.
+      - name: scheduled_annual_hours
+        description: Not available in source; always null.
+      - name: scheduled_work_hours
+        description: Not available in source; always null.
+      - name: weekly_hours
+        description: Not available in source; always null.
+      - name: date_time_changed
+        description: Not available in source; always null.
+      - name: gold_load_date
+        description: Timestamp the row was loaded into the gold layer.
+      - name: _fivetran_synced
+        description: Latest Fivetran sync timestamp across the source tables feeding the row (timestamp_ntz); incremental watermark.

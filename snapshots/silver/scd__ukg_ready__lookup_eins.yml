@@ -1,0 +1,7 @@
+snapshots:
+  - name: scd__ukg_ready__lookup_eins
+    description: SCD type 2 history of employer identification numbers (companies).
+    columns:
+      - name: dbt_scd_id
+        description: Surrogate key of the company version.
+        data_tests: [unique, not_null]

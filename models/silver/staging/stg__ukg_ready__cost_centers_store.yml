@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: stg__ukg_ready__cost_centers_store
+    description: Store cost-center hierarchy (locations).
+    columns:
+      - name: cost_center_store_key
+        description: Surrogate key on id.
+        data_tests: [unique, not_null]
+      - name: parent_cost_center_store_key
+        description: Surrogate key on parent_id.
+      - name: id
+        description: UKG Ready store cost-center id.
+      - name: parent_id
+        description: Id of the parent cost center; null for the root level.
+      - name: name
+        description: Cost-center name.
+      - name: silver_load_date
+        description: Timestamp the row was loaded into the silver layer.
+      - name: _fivetran_synced
+        description: Fivetran sync timestamp of the source row (timestamp_ntz); used as the incremental watermark downstream.

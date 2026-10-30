@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: stg__ukg_ready__employees
+    description: Cleaned employee master.
+    columns:
+      - name: employee_key
+        description: Surrogate key on id.
+        data_tests: [unique, not_null]
+      - name: id
+        description: UKG Ready employee id.
+      - name: employee_id
+        description: Business employee identifier (employee number).
+      - name: primary_account_id
+        description: Primary UKG Ready account id of the employee.
+      - name: ein_name
+        description: Name of the employer identification number (company) the employee belongs to.
+      - name: status
+        description: Employment status.
+      - name: hired_date
+        description: Date the employee was hired.
+      - name: started_date
+        description: Date the employee started.
+      - name: terminated_date
+        description: Date the employee was terminated, if applicable.
+      - name: silver_load_date
+        description: Timestamp the row was loaded into the silver layer.
+      - name: _fivetran_synced
+        description: Fivetran sync timestamp of the source row (timestamp_ntz); used as the incremental watermark downstream.

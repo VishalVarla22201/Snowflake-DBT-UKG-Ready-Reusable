@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: stg__ukg_ready__employee_details
+    description: Employee to job/store cost-center assignment.
+    columns:
+      - name: employee_key
+        description: Surrogate key on id; joins to stg__ukg_ready__employees.employee_key.
+        data_tests: [unique, not_null]
+      - name: cost_center_job_key
+        description: Surrogate key on cost_center_job_id; joins to stg__ukg_ready__cost_centers_org.cost_center_org_key.
+      - name: cost_center_store_key
+        description: Surrogate key on cost_center_store_id; joins to stg__ukg_ready__cost_centers_store.cost_center_store_key.
+      - name: id
+        description: UKG Ready employee id.
+      - name: cost_center_job_id
+        description: Id of the job cost center assigned to the employee.
+      - name: cost_center_store_id
+        description: Id of the store cost center assigned to the employee.
+      - name: silver_load_date
+        description: Timestamp the row was loaded into the silver layer.
+      - name: _fivetran_synced
+        description: Fivetran sync timestamp of the source row (timestamp_ntz); used as the incremental watermark downstream.

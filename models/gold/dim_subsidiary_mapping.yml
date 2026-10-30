@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: dim_subsidiary_mapping
+    description: Manually maintained mapping between subsidiaries and companies.
+    columns:
+      - name: subsidiary_mapping_key
+        description: Surrogate key on dim_subsidiary_id and dim_company_id.
+        data_tests: [not_null]
+      - name: subsidiary_key
+        description: Surrogate key on dim_subsidiary_id.
+      - name: company_key
+        description: Surrogate key on dim_company_id; joins to dim_hr_company.company_key.
+      - name: dim_subsidiary_id
+        description: Subsidiary id.
+      - name: subsidiary_name
+        description: Subsidiary name.
+      - name: company_name
+        description: Company name.
+      - name: dim_company_id
+        description: Company (EIN) id.
+      - name: gold_load_date
+        description: Timestamp the row was loaded into the gold layer.

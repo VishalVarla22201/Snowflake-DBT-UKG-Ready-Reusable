@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: dim_hr_location
+    description: Location dimension (level 3 of the store cost-center hierarchy).
+    columns:
+      - name: location_key
+        description: Surrogate key on dim_location_id.
+        data_tests: [unique, not_null]
+      - name: dim_location_id
+        description: UKG Ready cost-center id of the location.
+      - name: location_name
+        description: Location name.
+      - name: gold_load_date
+        description: Timestamp the row was loaded into the gold layer.

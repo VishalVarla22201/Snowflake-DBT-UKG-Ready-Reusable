@@ -1,0 +1,7 @@
+snapshots:
+  - name: scd__ukg_ready__employee_details
+    description: SCD type 2 history of the employee to job/store cost-center assignment.
+    columns:
+      - name: dbt_scd_id
+        description: Surrogate key of the assignment version.
+        data_tests: [unique, not_null]

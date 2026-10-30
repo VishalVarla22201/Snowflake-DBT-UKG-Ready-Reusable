@@ -1,0 +1,7 @@
+snapshots:
+  - name: scd__ukg_ready__compensation_history
+    description: SCD type 2 history of compensation records (one row per record version).
+    columns:
+      - name: dbt_scd_id
+        description: Surrogate key of the compensation record version.
+        data_tests: [unique, not_null]

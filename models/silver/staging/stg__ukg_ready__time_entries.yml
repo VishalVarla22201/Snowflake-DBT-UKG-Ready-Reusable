@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: stg__ukg_ready__time_entries
+    description: Flattened time entries (one row per entry / cost-center line / extraction window).
+    columns:
+      - name: time_entry_key
+        description: Surrogate key on employee_account_id, time_entries_id, cost-center index, start_date, end_date.
+        data_tests: [unique, not_null]
+      - name: employee_key
+        description: Surrogate key on employee_account_id.
+      - name: cost_center_key
+        description: Surrogate key on time_entries_cost_centers_value_id.
+      - name: start_date
+        description: Start of the extraction window.
+      - name: end_date
+        description: End of the extraction window.
+      - name: employee_account_id
+        description: UKG Ready employee account id.
+      - name: time_entries_id
+        description: UKG Ready time entry id.
+      - name: time_entries_date
+        description: Date of the time entry.
+      - name: time_entries_end_time
+        description: Clock-out time of the entry.
+      - name: time_entries_start_time
+        description: Clock-in time of the entry.
+      - name: time_entries_type
+        description: Type of the time entry.
+      - name: time_entries_approval_status
+        description: Approval status of the time entry.
+      - name: time_entries_calc_start_time
+        description: Calculated start time.
+      - name: time_entries_calc_end_time
+        description: Calculated end time.
+      - name: time_entries_calc_total
+        description: Calculated total duration in milliseconds.
+      - name: time_entries_calc_total_hours
+        description: Calculated total duration in hours.
+      - name: time_entries_total
+        description: Total duration in milliseconds.
+      - name: time_entries_total_hours
+        description: Total duration in hours.
+      - name: is_calculated
+        description: Whether the entry is a calculated entry.
+      - name: is_raw
+        description: Whether the entry is a raw entry.
+      - name: time_entries_time_off_id
+        description: Time-off id when the entry is a time-off entry; otherwise null.
+      - name: time_entries_cost_centers_index
+        description: Index of the cost-center line within the time entry.
+      - name: time_entries_cost_centers_value_id
+        description: Cost-center id of the line.
+      - name: silver_load_date
+        description: Timestamp the row was loaded into the silver layer.
+      - name: _fivetran_synced
+        description: Fivetran sync timestamp of the source row (timestamp_ntz); used as the incremental watermark downstream.

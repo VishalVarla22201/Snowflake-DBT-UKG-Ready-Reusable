@@ -1,6 +1,21 @@
+{{
+    config(
+        materialized='incremental',
+        incremental_strategy='merge',
+        unique_key='company_key',
+        on_schema_change='sync_all_columns'
+    )
+}}
+
 with source as (
-    select distinct id, ein_name
-    from {{ ref('ukg_ready_lookup_eins') }}
+    select distinct
+        id,
+        ein_name,
+        _fivetran_synced
+    from {{ ref('stg__ukg_ready__lookup_eins') }}
+    {% if is_incremental() %}
+    where _fivetran_synced > {{ incremental_watermark() }}
+    {% endif %}
 )
 
 select
@@ -8,5 +23,6 @@ select
     id as dim_company_id,
     null as company_code,
     ein_name as company_name,
-    current_timestamp() as gold_load_date
+    current_timestamp() as gold_load_date,
+    _fivetran_synced
 from source

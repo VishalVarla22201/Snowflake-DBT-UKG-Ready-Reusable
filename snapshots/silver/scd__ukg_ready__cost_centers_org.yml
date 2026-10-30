@@ -1,0 +1,7 @@
+snapshots:
+  - name: scd__ukg_ready__cost_centers_org
+    description: SCD type 2 history of the organisation cost-center hierarchy (jobs / departments).
+    columns:
+      - name: dbt_scd_id
+        description: Surrogate key of the cost-center version.
+        data_tests: [unique, not_null]

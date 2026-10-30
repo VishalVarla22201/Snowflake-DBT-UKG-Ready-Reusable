@@ -1,0 +1,7 @@
+snapshots:
+  - name: scd__ukg_ready__employees
+    description: SCD type 2 history of the UKG Ready employee master (one row per employee version).
+    columns:
+      - name: dbt_scd_id
+        description: Surrogate key of the employee version.
+        data_tests: [unique, not_null]

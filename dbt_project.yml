@@ -5,20 +5,23 @@ config-version: 2
 profile: 'ukg_ready'
 
 model-paths: ["models"]
+snapshot-paths: ["snapshots"]
 macro-paths: ["macros"]
 test-paths: ["tests"]
 target-path: "target"
 clean-targets: ["target", "dbt_packages"]
 
 vars:
-  # Raw UKG Ready landing tables (source 'ukg_ready')
-  raw_database: wagway_raw
-  raw_schema: ukg_ready
-  # Database holding the 'manual' schema with hand-maintained mapping tables (source 'manual')
-  mapping_database: wagway_dev
+  # Hours re-read before the incremental watermark (see macros/incremental_watermark.sql)
+  incremental_lookback_hours: 1
+  # Database holding the 'manual' schema with hand-maintained mapping tables (source 'manual');
+  # follows the environment like the models: PROD_DB for the 'prod' target, otherwise DEV_DB
+  mapping_database: "{{ 'PROD_DB' if target.name == 'prod' else 'DEV_DB' }}"
 
 models:
   ukg_ready:
+    # Silver and gold are built into PROD_DB for the 'prod' target, otherwise DEV_DB
+    +database: "{{ 'PROD_DB' if target.name == 'prod' else 'DEV_DB' }}"
     +materialized: table
     silver:
       +schema: SILVER
@@ -26,3 +29,11 @@ models:
     gold:
       +schema: GOLD
       +tags: ['gold', 'ukg_ready']
+
+snapshots:
+  ukg_ready:
+    # SCD type 2 history of the silver staging models, built next to them
+    +database: "{{ 'PROD_DB' if target.name == 'prod' else 'DEV_DB' }}"
+    silver:
+      +schema: SILVER
+      +tags: ['silver', 'snapshot', 'ukg_ready']
