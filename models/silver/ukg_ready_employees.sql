@@ -1,5 +1,14 @@
 with source_data as (
-    select * from {{ source('ukg_ready', 'EMPLOYEES') }}
+    select
+        id,
+        employee_id,
+        primary_account_id,
+        ein_name,
+        status,
+        dates_hired,
+        dates_started,
+        dates_terminated
+    from {{ source('ukg_ready', 'EMPLOYEES') }}
 ),
 
 cleaned as (
@@ -18,5 +27,13 @@ cleaned as (
 
 select
     {{ dbt_utils.generate_surrogate_key(['id']) }} as employee_key,
-    *
+    id,
+    employee_id,
+    primary_account_id,
+    ein_name,
+    status,
+    hired_date,
+    started_date,
+    terminated_date,
+    silver_load_date
 from cleaned

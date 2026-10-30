@@ -31,11 +31,11 @@ with source as (
         select distinct
             employee_account_id,
             amount_period,
-            row_number() over (partition by employee_account_id order by effective_from desc) as row_number
+            row_number() over (partition by employee_account_id order by effective_from desc) as compensation_rank
         from {{ ref('ukg_ready_compensation_history') }}
         where effective_from <> '1900-12-31'
     ) ch
-        on ch.employee_account_id = e.id and row_number = 1
+        on ch.employee_account_id = e.id and ch.compensation_rank = 1
     left join {{ ref('ukg_ready_employee_details') }} d on e.id = d.id
     left join {{ ref('ukg_ready_cost_center_org') }} job on d.cost_center_job_id = job.id
     left join {{ ref('ukg_ready_cost_center_store') }} store on d.cost_center_store_id = store.id
@@ -48,5 +48,29 @@ select
     {{ dbt_utils.generate_surrogate_key(['dim_location_id']) }} as location_key,
     {{ dbt_utils.generate_surrogate_key(['dim_job_id']) }} as job_key,
     {{ dbt_utils.generate_surrogate_key(['dim_department_id']) }} as department_key,
-    *
+    dim_employee_id,
+    employee_id,
+    hire_source,
+    employee_status,
+    employee_type,
+    original_hire_date,
+    hire_date,
+    termination_date,
+    termination_reason,
+    termination_type,
+    dim_company_id,
+    dim_location_id,
+    dim_job_id,
+    dim_class_id,
+    dim_department_id,
+    dim_job_group_id,
+    supervisor_company_id,
+    manager_id,
+    employee_status_reason_code,
+    job_function,
+    scheduled_annual_hours,
+    scheduled_work_hours,
+    weekly_hours,
+    date_time_changed,
+    gold_load_date
 from source s

@@ -1,5 +1,10 @@
 with source_data as (
-    select * from {{ source('ukg_ready', 'LOOKUP_EINS') }}
+    select
+        id,
+        ein_name,
+        ein_tax_id,
+        ein_country_id
+    from {{ source('ukg_ready', 'LOOKUP_EINS') }}
 ),
 
 cleaned as (
@@ -14,5 +19,9 @@ cleaned as (
 
 select
     {{ dbt_utils.generate_surrogate_key(['id']) }} as company_key,
-    *
+    id,
+    ein_name,
+    ein_tax_id,
+    ein_country_id,
+    silver_load_date
 from cleaned

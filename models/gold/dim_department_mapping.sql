@@ -12,5 +12,9 @@ select
     {{ dbt_utils.generate_surrogate_key(['dim_department_id', 'dim_hr_department_id']) }} as department_mapping_key,
     {{ dbt_utils.generate_surrogate_key(['dim_department_id']) }} as department_key,
     {{ dbt_utils.generate_surrogate_key(['dim_hr_department_id']) }} as hr_department_key,
-    *
+    dim_department_id,
+    department_name,
+    dim_hr_department_id,
+    hr_department_name,
+    gold_load_date
 from source

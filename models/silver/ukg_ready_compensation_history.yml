@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: ukg_ready_compensation_history
+    description: Cleaned compensation history per employee account (one row per compensation record).
+    columns:
+      - name: compensation_history_key
+        description: Surrogate key (dbt_utils) on id.
+        data_tests: [unique, not_null]
+      - name: employee_key
+        description: Surrogate key on employee_account_id; joins to ukg_ready_employees.employee_key.
+      - name: id
+        description: UKG Ready compensation record id.
+      - name: employee_account_id
+        description: UKG Ready employee account id the compensation belongs to.
+      - name: effective_from
+        description: Date from which this compensation record is effective.
+      - name: amount
+        description: Pay amount for the period given in amount_period.
+      - name: hourly_pay
+        description: Hourly pay rate.
+      - name: amount_period
+        description: Period the amount applies to (e.g. HOUR, YEAR).
+      - name: time
+        description: Scheduled working time in milliseconds for the period given in time_period.
+      - name: time_period
+        description: Period the scheduled time applies to (e.g. WEEK, YEAR).
+      - name: num_pp_in_year
+        description: Number of pay periods in a year.
+      - name: currency
+        description: Currency code of the amount.
+      - name: silver_load_date
+        description: Timestamp the row was loaded into the silver layer.

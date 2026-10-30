@@ -3,7 +3,13 @@ with te_latest as (
     -- per employee per day. Using MAX(...) OVER + QUALIFY (rather than
     -- ROW_NUMBER = 1) preserves ALL time entries within that latest
     -- window, instead of collapsing each employee/day to a single row.
-    select *
+    select
+        time_entry_key,
+        employee_account_id,
+        end_date,
+        time_entries_date,
+        time_entries_time_off_id,
+        time_entries_calc_total
     from {{ ref('ukg_ready_time_entries') }}
     qualify end_date = max(end_date) over (
         partition by employee_account_id, time_entries_date
@@ -55,7 +61,7 @@ base_source as (
         te.time_entries_date as pay_date,
         case
             when te.time_entries_time_off_id is not null
-            then time_entries_calc_total / 3600000
+            then te.time_entries_calc_total / 3600000.0
             else 0
         end as paid_absence_hours,
         (paid_absence_hours + total_hours_worked) * hourly_pay_rate as total_earnings_amount,
@@ -73,7 +79,22 @@ base_source as (
 )
 
 select
-    * exclude (total_hours_worked),
+    payroll_workhours_key,
+    employee_key,
+    annual_salary,
+    currency_code,
+    dim_employee_id,
+    employee_id,
+    total_tax_amount,
+    hourly_pay_rate,
+    total_deduction_amount,
+    total_hours,
+    pay_date,
+    paid_absence_hours,
+    total_earnings_amount,
+    net_amount,
+    unpaid_absence_hours,
+    gold_load_date,
     case
         when total_hours > 0 and total_hours_worked > total_hours
         then total_hours_worked - total_hours

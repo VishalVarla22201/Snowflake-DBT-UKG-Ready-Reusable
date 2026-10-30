@@ -1,0 +1,55 @@
+version: 2
+
+models:
+  - name: fact_employee_salary_details
+    description: Payroll amounts unpivoted into one row per payroll_workhours row and earning type (tax, deduction, net).
+    columns:
+      - name: employee_salary_detail_key
+        description: Surrogate key on payroll_workhours_key and dim_earning_id.
+        data_tests: [unique, not_null]
+      - name: payroll_workhours_key
+        description: Foreign key to fact_payroll_workhours.
+        data_tests:
+          - relationships:
+              to: ref('fact_payroll_workhours')
+              field: payroll_workhours_key
+      - name: employee_key
+        description: Foreign key to dim_hr_employee.
+      - name: earning_key
+        description: Foreign key to dim_salary_code.
+        data_tests:
+          - relationships:
+              to: ref('dim_salary_code')
+              field: earning_key
+      - name: dim_employee_id
+        description: UKG Ready employee id.
+      - name: employee_id
+        description: Primary UKG Ready account id of the employee.
+      - name: dim_earning_id
+        description: Earning type id (1 = tax, 2 = deduction, 3 = net).
+      - name: dim_company_id
+        description: Not available in source; always null.
+      - name: location_id
+        description: Not available in source; always null.
+      - name: job_id
+        description: Not available in source; always null.
+      - name: pay_group
+        description: Not available in source; always null.
+      - name: base_amount
+        description: Amount for the earning type.
+      - name: current_hours
+        description: Hours worked on the pay date.
+      - name: ctc_hourly_pay_rate
+        description: Hourly pay rate.
+      - name: base_hourly_pay_rate
+        description: Hourly pay rate.
+      - name: pay_date
+        description: Date of the time entry.
+      - name: period_pay_rate
+        description: Not available in source; always null.
+      - name: tax_category
+        description: Not available in source; always null.
+      - name: current_amount
+        description: Amount for the earning type.
+      - name: gold_load_date
+        description: Timestamp the row was loaded into the gold layer.

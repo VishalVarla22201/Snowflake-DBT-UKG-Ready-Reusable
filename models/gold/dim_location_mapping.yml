@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: dim_location_mapping
+    description: Manually maintained mapping between target locations and HR locations.
+    columns:
+      - name: location_mapping_key
+        description: Surrogate key on dim_location_id and dim_hr_location_id.
+        data_tests: [not_null]
+      - name: location_key
+        description: Surrogate key on dim_location_id.
+      - name: hr_location_key
+        description: Surrogate key on dim_hr_location_id; joins to dim_hr_location.location_key.
+      - name: dim_location_id
+        description: Target location id (0 when missing).
+      - name: location_name
+        description: Target location name.
+      - name: dim_hr_location_id
+        description: HR location id (0 when missing).
+      - name: hr_location_name
+        description: HR location name.
+      - name: gold_load_date
+        description: Timestamp the row was loaded into the gold layer.

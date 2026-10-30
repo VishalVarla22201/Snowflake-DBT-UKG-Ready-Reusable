@@ -1,5 +1,9 @@
 with source_data as (
-    select * from {{ source('ukg_ready', 'COST_CENTERS_ORG') }}
+    select
+        id,
+        parent_id,
+        name
+    from {{ source('ukg_ready', 'COST_CENTERS_ORG') }}
 ),
 
 cleaned as (
@@ -14,5 +18,8 @@ cleaned as (
 select
     {{ dbt_utils.generate_surrogate_key(['id']) }} as cost_center_org_key,
     {{ dbt_utils.generate_surrogate_key(['parent_id']) }} as parent_cost_center_org_key,
-    *
+    id,
+    parent_id,
+    name,
+    silver_load_date
 from cleaned

@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: dim_salary_code
+    description: Static earning-type dimension used to label the unpivoted payroll amounts.
+    columns:
+      - name: earning_key
+        description: Surrogate key on dim_earning_id.
+        data_tests: [unique, not_null]
+      - name: dim_earning_id
+        description: Earning type id (1 = tax, 2 = deduction, 3 = net).
+      - name: description
+        description: Earning type description.
+      - name: gold_load_date
+        description: Timestamp the row was loaded into the gold layer.

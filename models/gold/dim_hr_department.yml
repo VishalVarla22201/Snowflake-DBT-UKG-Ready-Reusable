@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: dim_hr_department
+    description: Department dimension (level 4 of the organisation cost-center hierarchy).
+    columns:
+      - name: department_key
+        description: Surrogate key on dim_department_id.
+        data_tests: [unique, not_null]
+      - name: dim_department_id
+        description: UKG Ready cost-center id of the department.
+      - name: department_name
+        description: Department name.
+      - name: gold_load_date
+        description: Timestamp the row was loaded into the gold layer.

@@ -1,5 +1,16 @@
 with source_data as (
-    select * from {{ source('ukg_ready', 'COMPENSATION_HISTORY') }}
+    select
+        id,
+        employee_account_id,
+        effective_from,
+        amount,
+        hourly_pay,
+        amount_period,
+        time,
+        time_period,
+        num_pp_in_year,
+        currency
+    from {{ source('ukg_ready', 'COMPENSATION_HISTORY') }}
 ),
 
 cleaned as (
@@ -25,5 +36,15 @@ cleaned as (
 select
     {{ dbt_utils.generate_surrogate_key(['id']) }} as compensation_history_key,
     {{ dbt_utils.generate_surrogate_key(['employee_account_id']) }} as employee_key,
-    *
+    id,
+    employee_account_id,
+    effective_from,
+    amount,
+    hourly_pay,
+    amount_period,
+    time,
+    time_period,
+    num_pp_in_year,
+    currency,
+    silver_load_date
 from cleaned

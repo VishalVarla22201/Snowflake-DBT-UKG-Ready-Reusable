@@ -1,0 +1,46 @@
+version: 2
+
+models:
+  - name: fact_payroll_workhours
+    description: >
+      Payroll work hours and earnings per time entry line, using only the latest
+      extraction window per employee and day, priced with the compensation record
+      effective on the entry date.
+    columns:
+      - name: payroll_workhours_key
+        description: Surrogate key; equals ukg_ready_time_entries.time_entry_key.
+        data_tests: [unique, not_null]
+      - name: employee_key
+        description: Foreign key to dim_hr_employee.
+      - name: annual_salary
+        description: Not available in source; always null.
+      - name: currency_code
+        description: Currency of the compensation record.
+      - name: dim_employee_id
+        description: UKG Ready employee id.
+      - name: employee_id
+        description: Primary UKG Ready account id of the employee.
+      - name: total_tax_amount
+        description: Not available in source; always null.
+      - name: hourly_pay_rate
+        description: Hourly pay rate effective on pay_date.
+      - name: total_deduction_amount
+        description: Not available in source; always null.
+      - name: total_hours
+        description: Scheduled hours per day derived from the compensation record.
+      - name: pay_date
+        description: Date of the time entry.
+      - name: paid_absence_hours
+        description: Hours of paid time off.
+      - name: total_earnings_amount
+        description: (paid_absence_hours + total_hours_worked) * hourly_pay_rate.
+      - name: net_amount
+        description: Net amount; currently equal to total_earnings_amount.
+      - name: unpaid_absence_hours
+        description: Not available in source; always null.
+      - name: gold_load_date
+        description: Timestamp the row was loaded into the gold layer.
+      - name: bonus_total_ot_hours
+        description: Hours worked above total_hours.
+      - name: total_hours_worked
+        description: Regular hours worked (excluding overtime).

@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: ukg_ready_lookup_eins
+    description: Employer identification numbers (companies).
+    columns:
+      - name: company_key
+        description: Surrogate key on id.
+        data_tests: [unique, not_null]
+      - name: id
+        description: UKG Ready EIN id.
+      - name: ein_name
+        description: Company name registered for the EIN.
+      - name: ein_tax_id
+        description: Employer tax id.
+      - name: ein_country_id
+        description: Country id of the EIN.
+      - name: silver_load_date
+        description: Timestamp the row was loaded into the silver layer.

@@ -12,5 +12,9 @@ select
     {{ dbt_utils.generate_surrogate_key(['dim_location_id', 'dim_hr_location_id']) }} as location_mapping_key,
     {{ dbt_utils.generate_surrogate_key(['dim_location_id']) }} as location_key,
     {{ dbt_utils.generate_surrogate_key(['dim_hr_location_id']) }} as hr_location_key,
-    *
+    dim_location_id,
+    location_name,
+    dim_hr_location_id,
+    hr_location_name,
+    gold_load_date
 from source
