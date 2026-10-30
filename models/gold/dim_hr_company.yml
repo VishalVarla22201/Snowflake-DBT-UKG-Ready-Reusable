@@ -15,3 +15,5 @@ models:
         description: Company name.
       - name: gold_load_date
         description: Timestamp the row was loaded into the gold layer.
+      - name: _fivetran_synced
+        description: Latest Fivetran sync timestamp across the source tables feeding the row (timestamp_ntz); incremental watermark.

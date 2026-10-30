@@ -1,4 +1,7 @@
 # Copy to ~/.dbt/profiles.yml (or set DBT_PROFILES_DIR) and fill in values.
+# Models are built into the database of the target (see +database in dbt_project.yml):
+#   dev  -> DEV_DB      prod -> PROD_DB
+# Raw Fivetran data is read from FIVETRAN_DATABASE / FIVETRAN_UKG_SCHEMA (see vars in dbt_project.yml).
 ukg_ready:
   target: dev
   outputs:
@@ -9,6 +12,16 @@ ukg_ready:
       password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
       role: "{{ env_var('SNOWFLAKE_ROLE') }}"
       warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
-      database: wagway_prod   # models land in <database>.SILVER and <database>.GOLD
+      database: DEV_DB        # models land in DEV_DB.SILVER and DEV_DB.GOLD
+      schema: dbt_default     # unused by models (custom schemas are used verbatim)
+      threads: 4
+    prod:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE') }}"
+      database: PROD_DB       # models land in PROD_DB.SILVER and PROD_DB.GOLD
       schema: dbt_default     # unused by models (custom schemas are used verbatim)
       threads: 4

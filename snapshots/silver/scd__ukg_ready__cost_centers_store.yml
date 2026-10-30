@@ -1,0 +1,14 @@
+snapshots:
+  - name: scd__ukg_ready__cost_centers_store
+    description: SCD type 2 history of the store cost-center hierarchy (locations).
+    relation: ref('stg__ukg_ready__cost_centers_store')
+    config:
+      unique_key: cost_center_store_key
+      strategy: timestamp
+      updated_at: _fivetran_synced
+      hard_deletes: invalidate
+      dbt_valid_to_current: "to_date('9999-12-31')"
+    columns:
+      - name: dbt_scd_id
+        description: Surrogate key of the cost-center version.
+        data_tests: [unique, not_null]

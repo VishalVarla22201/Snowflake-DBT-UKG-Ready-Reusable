@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: ukg_ready_lookup_eins
+  - name: stg__ukg_ready__lookup_eins
     description: Employer identification numbers (companies).
     columns:
       - name: company_key
@@ -17,3 +17,5 @@ models:
         description: Country id of the EIN.
       - name: silver_load_date
         description: Timestamp the row was loaded into the silver layer.
+      - name: _fivetran_synced
+        description: Fivetran sync timestamp of the source row (timestamp_ntz); used as the incremental watermark downstream.

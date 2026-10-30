@@ -15,10 +15,10 @@ sources:
       - name: TIME_ENTRIES
 
   - name: manual
-    description: Manually maintained Wagway mapping tables feeding the gold mapping dimensions.
+    description: Manually maintained mapping tables feeding the gold mapping dimensions.
     database: "{{ var('mapping_database') }}"
     schema: manual
     tables:
-      - name: wagway_department_mapping
-      - name: wagway_hr_location_mapping
-      - name: wagway_subsidiary_mapping
+      - name: department_mapping
+      - name: hr_location_mapping
+      - name: subsidiary_mapping

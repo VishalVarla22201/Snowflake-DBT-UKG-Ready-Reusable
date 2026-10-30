@@ -1,0 +1,14 @@
+snapshots:
+  - name: scd__ukg_ready__lookup_eins
+    description: SCD type 2 history of employer identification numbers (companies).
+    relation: ref('stg__ukg_ready__lookup_eins')
+    config:
+      unique_key: company_key
+      strategy: timestamp
+      updated_at: _fivetran_synced
+      hard_deletes: invalidate
+      dbt_valid_to_current: "to_date('9999-12-31')"
+    columns:
+      - name: dbt_scd_id
+        description: Surrogate key of the company version.
+        data_tests: [unique, not_null]

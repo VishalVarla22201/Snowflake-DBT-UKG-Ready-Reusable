@@ -5,7 +5,7 @@ with source as (
         company_name,
         dim_company_id,
         current_timestamp()::timestamp_ntz as gold_load_date
-    from {{ source('manual', 'wagway_subsidiary_mapping') }}
+    from {{ source('manual', 'subsidiary_mapping') }}
 )
 
 select

@@ -1,9 +1,12 @@
 with source_data as (
     select
+        _fivetran_synced,
+        _fivetran_deleted,
         id,
         parent_id,
         name
     from {{ source('ukg_ready', 'COST_CENTERS_ORG') }}
+    where not coalesce(_fivetran_deleted, false)
 ),
 
 cleaned as (
@@ -11,7 +14,8 @@ cleaned as (
         cast(id as int) as id,
         cast(parent_id as int) as parent_id,
         trim(name) as name,
-        current_timestamp() as silver_load_date
+        current_timestamp() as silver_load_date,
+        cast(_fivetran_synced as timestamp_ntz) as _fivetran_synced
     from source_data
 )
 
@@ -21,5 +25,6 @@ select
     id,
     parent_id,
     name,
-    silver_load_date
+    silver_load_date,
+    _fivetran_synced
 from cleaned

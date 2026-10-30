@@ -1,14 +1,14 @@
 version: 2
 
 models:
-  - name: ukg_ready_compensation_history
+  - name: stg__ukg_ready__compensation_history
     description: Cleaned compensation history per employee account (one row per compensation record).
     columns:
       - name: compensation_history_key
         description: Surrogate key (dbt_utils) on id.
         data_tests: [unique, not_null]
       - name: employee_key
-        description: Surrogate key on employee_account_id; joins to ukg_ready_employees.employee_key.
+        description: Surrogate key on employee_account_id; joins to stg__ukg_ready__employees.employee_key.
       - name: id
         description: UKG Ready compensation record id.
       - name: employee_account_id
@@ -31,3 +31,5 @@ models:
         description: Currency code of the amount.
       - name: silver_load_date
         description: Timestamp the row was loaded into the silver layer.
+      - name: _fivetran_synced
+        description: Fivetran sync timestamp of the source row (timestamp_ntz); used as the incremental watermark downstream.

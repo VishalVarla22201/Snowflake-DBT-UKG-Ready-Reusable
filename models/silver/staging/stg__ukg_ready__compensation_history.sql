@@ -1,5 +1,7 @@
 with source_data as (
     select
+        _fivetran_synced,
+        _fivetran_deleted,
         id,
         employee_account_id,
         effective_from,
@@ -11,6 +13,7 @@ with source_data as (
         num_pp_in_year,
         currency
     from {{ source('ukg_ready', 'COMPENSATION_HISTORY') }}
+    where not coalesce(_fivetran_deleted, false)
 ),
 
 cleaned as (
@@ -29,7 +32,8 @@ cleaned as (
         trim(time_period) as time_period,
         cast(num_pp_in_year as int) as num_pp_in_year,
         trim(currency) as currency,
-        current_timestamp() as silver_load_date
+        current_timestamp() as silver_load_date,
+        cast(_fivetran_synced as timestamp_ntz) as _fivetran_synced
     from source_data
 )
 
@@ -46,5 +50,6 @@ select
     time_period,
     num_pp_in_year,
     currency,
-    silver_load_date
+    silver_load_date,
+    _fivetran_synced
 from cleaned

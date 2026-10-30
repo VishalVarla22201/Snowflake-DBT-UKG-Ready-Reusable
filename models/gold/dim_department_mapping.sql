@@ -5,7 +5,7 @@ with source as (
         coalesce(dim_hr_department_id, 0) as dim_hr_department_id,
         hr_department_name,
         current_timestamp()::timestamp_ntz as gold_load_date
-    from {{ source('manual', 'wagway_department_mapping') }}
+    from {{ source('manual', 'department_mapping') }}
 )
 
 select

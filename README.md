@@ -3,7 +3,7 @@
 Converts the compiled UKG Ready silver/gold SQL into a parameterised dbt project.
 
 ```
-raw (wagway_raw.ukg_ready) ──► silver (SILVER.ukg_ready_*) ──► gold (GOLD.dim_* / fact_*)
+raw (Fivetran: <FIVETRAN_DATABASE>.ukg_ready) ──► silver (SILVER.stg__ukg_ready__*) ──► gold (GOLD.dim_* / fact_*)
 ```
 
 ## Setup
@@ -13,12 +13,14 @@ cp profiles.yml.example ~/.dbt/profiles.yml   # then set env vars
 dbt deps
 dbt build
 ```
-Override locations per environment/project: `dbt build --vars '{raw_database: my_raw, mapping_database: my_dev}'`
-(see `vars:` in `dbt_project.yml`). The build database comes from the profile (`wagway_prod` by default).
+Databases (see `dbt_project.yml`):
+- **Raw (Fivetran):** `FIVETRAN_DATABASE` [`FIVETRAN_DB`] and `FIVETRAN_UKG_SCHEMA` [`ukg_ready`] environment variables.
+- **Silver / gold / mapping tables:** `DEV_DB` for any target except `prod`; `PROD_DB` when run with `--target prod`.
 
 ## Layout
 - `models/sources.yml` – raw UKG tables + the 3 manual mapping tables (source `manual`, schema `manual`).
-- `models/silver/` – 7 cleaning models (`ukg_ready_*`), schema `SILVER`.
+- `models/silver/staging/` – 7 staging models (`stg__ukg_ready__*`), schema `SILVER`.
+- `snapshots/silver/` – SCD type 2 snapshots (`scd__ukg_ready__*`) of 6 staging models, strategy `timestamp` on `_fivetran_synced`, schema `SILVER`. Run with `dbt snapshot`.
 - `models/gold/` – 11 dimension/fact models, schema `GOLD`; model names equal the original table names.
 - `macros/generate_schema_name.sql` – uses `SILVER`/`GOLD` verbatim.
 
@@ -38,6 +40,6 @@ No source table contains a `customer_id` column. If you reuse this on data that 
 `{{ dbt_utils.generate_surrogate_key(['customer_id']) }} as customer_key`.
 
 ## Notes
-- Gold mapping models read `<mapping_database>.manual.wagway_*_mapping`; these must exist (or repoint the `mapping_*` vars).
+- Gold mapping models read `<mapping_database>.manual.*_mapping`; these must exist (or repoint the `mapping_*` vars).
 - Logic is carried over unchanged from the compiled SQL (including the level-3/level-4 hierarchy filters and the `'1900-12-31'` compensation filter).
 - Not executed against Snowflake in authoring; run `dbt build` to validate.

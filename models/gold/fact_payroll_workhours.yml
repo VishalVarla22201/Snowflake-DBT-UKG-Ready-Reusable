@@ -8,8 +8,11 @@ models:
       effective on the entry date.
     columns:
       - name: payroll_workhours_key
-        description: Surrogate key; equals ukg_ready_time_entries.time_entry_key.
+        description: Surrogate key; equals stg__ukg_ready__time_entries.time_entry_key.
         data_tests: [unique, not_null]
+      - name: employee_date_key
+        description: Surrogate key on employee and pay date; the incremental unique key (all rows of an employee/day are replaced together).
+        data_tests: [not_null]
       - name: employee_key
         description: Foreign key to dim_hr_employee.
       - name: annual_salary
@@ -40,6 +43,8 @@ models:
         description: Not available in source; always null.
       - name: gold_load_date
         description: Timestamp the row was loaded into the gold layer.
+      - name: _fivetran_synced
+        description: Latest Fivetran sync timestamp across the source tables feeding the row (timestamp_ntz); incremental watermark.
       - name: bonus_total_ot_hours
         description: Hours worked above total_hours.
       - name: total_hours_worked

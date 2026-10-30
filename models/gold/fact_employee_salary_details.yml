@@ -13,6 +13,9 @@ models:
           - relationships:
               to: ref('fact_payroll_workhours')
               field: payroll_workhours_key
+      - name: employee_date_key
+        description: Surrogate key on employee and pay date; the incremental unique key (all rows of an employee/day are replaced together).
+        data_tests: [not_null]
       - name: employee_key
         description: Foreign key to dim_hr_employee.
       - name: earning_key
@@ -53,3 +56,5 @@ models:
         description: Amount for the earning type.
       - name: gold_load_date
         description: Timestamp the row was loaded into the gold layer.
+      - name: _fivetran_synced
+        description: Latest Fivetran sync timestamp across the source tables feeding the row (timestamp_ntz); incremental watermark.

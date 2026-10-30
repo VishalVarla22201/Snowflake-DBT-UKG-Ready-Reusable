@@ -1,10 +1,10 @@
 with recursive org_hierarchy as (
     select id, name, parent_id, 1 as level
-    from {{ ref('ukg_ready_cost_center_org') }}
+    from {{ ref('stg__ukg_ready__cost_centers_org') }}
     where parent_id is null
     union all
     select c.id, c.name, c.parent_id, h.level + 1
-    from {{ ref('ukg_ready_cost_center_org') }} c
+    from {{ ref('stg__ukg_ready__cost_centers_org') }} c
     join org_hierarchy h on c.parent_id = h.id
 )
 

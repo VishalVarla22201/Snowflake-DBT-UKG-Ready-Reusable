@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: ukg_ready_employees
+  - name: stg__ukg_ready__employees
     description: Cleaned employee master.
     columns:
       - name: employee_key
@@ -25,3 +25,5 @@ models:
         description: Date the employee was terminated, if applicable.
       - name: silver_load_date
         description: Timestamp the row was loaded into the silver layer.
+      - name: _fivetran_synced
+        description: Fivetran sync timestamp of the source row (timestamp_ntz); used as the incremental watermark downstream.
