@@ -20,7 +20,7 @@ Databases (see `dbt_project.yml`):
 ## Layout
 - `models/sources.yml` – raw UKG tables + the 3 manual mapping tables (source `manual`, schema `manual`).
 - `models/silver/staging/` – 7 staging models (`stg__ukg_ready__*`), schema `SILVER`.
-- `snapshots/silver/` – SCD type 2 snapshots (`scd__ukg_ready__*`) of 6 staging models, strategy `timestamp` on `_fivetran_synced`, schema `SILVER`. Run with `dbt snapshot`.
+- `snapshots/silver/` – SCD type 2 snapshots (`scd__ukg_ready__*`, SQL + YAML) of 6 staging models, strategy `timestamp` on `_fivetran_synced`, `hard_deletes: invalidate`, schema `SILVER`. Run with `dbt snapshot`.
 - `models/gold/` – 11 dimension/fact models, schema `GOLD`; model names equal the original table names.
 - `macros/generate_schema_name.sql` – uses `SILVER`/`GOLD` verbatim.
 

@@ -15,7 +15,7 @@ Branch: `feature/modifying-scipts-vv`
 | 6 | `_fivetran_synced` (timestamp_ntz) and `_fivetran_deleted` filter in silver | All 7 silver models; deleted rows are removed, `_fivetran_synced` is carried through |
 | 7 | Incremental gold models | `dim_hr_company` and `dim_hr_employee` (merge); `fact_payroll_workhours` and `fact_employee_salary_details` (delete+insert on new `employee_date_key`); watermark macro with a 1 hour lookback (`incremental_lookback_hours`) |
 | 8 | `staging/` subfolder | Silver staging models and their YAML moved to `models/silver/staging/`; renamed to `stg__ukg_ready__<source table>` |
-| 9 | SCD type 2 snapshots | `snapshots/silver/scd__ukg_ready__*` for 6 staging models; strategy `timestamp` on `_fivetran_synced`, `hard_deletes: invalidate`, one YAML per snapshot (needs dbt 1.9+) |
+| 9 | SCD type 2 snapshots | `snapshots/silver/scd__ukg_ready__*`: SQL snapshot blocks plus a YAML file each for 6 staging models; strategy `timestamp` on `_fivetran_synced`, `hard_deletes=invalidate`, `dbt_valid_to_current` = `9999-12-31` (current dbt config names) |
 
 ## Backlog
 
