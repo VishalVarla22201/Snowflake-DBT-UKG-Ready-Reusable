@@ -9,7 +9,7 @@ raw (Fivetran: fivetrandb.ukg_ready) ──► silver (SILVER.stg__ukg_ready__*)
 ## Setup
 ```bash
 pip install dbt-snowflake
-cp profiles.yml.example ~/.dbt/profiles.yml   # then set env vars
+# configure a Snowflake profile named ukg_ready with targets dev and prod in ~/.dbt/profiles.yml
 dbt deps
 dbt build
 ```
