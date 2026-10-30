@@ -12,9 +12,6 @@ target-path: "target"
 clean-targets: ["target", "dbt_packages"]
 
 vars:
-  # Raw UKG Ready tables are landed by Fivetran (source 'ukg_ready')
-  raw_database: "{{ env_var('FIVETRAN_DATABASE', 'FIVETRAN_DB') }}"
-  raw_schema: "{{ env_var('FIVETRAN_UKG_SCHEMA', 'ukg_ready') }}"
   # Hours re-read before the incremental watermark (see macros/incremental_watermark.sql)
   incremental_lookback_hours: 1
   # Database holding the 'manual' schema with hand-maintained mapping tables (source 'manual');

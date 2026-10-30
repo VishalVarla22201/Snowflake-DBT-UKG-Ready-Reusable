@@ -11,7 +11,7 @@ Branch: `feature/modifying-scipts-vv`
 | 2 | Replace `select *` with explicit columns | All 12 affected models (silver import CTEs and final selects, gold finals, `te_latest` in `fact_payroll_workhours`) |
 | 3 | Fix `row_number` alias in `dim_hr_employee` | Renamed to `compensation_rank`, join condition qualified as `ch.compensation_rank` |
 | 4 | Make division by `3600000` explicit | `3600000.0` in `fact_payroll_workhours` and `stg__ukg_ready__time_entries` |
-| 5 | Raw source is Fivetran; env-based databases | `raw_database` / `raw_schema` from `FIVETRAN_DATABASE` / `FIVETRAN_UKG_SCHEMA`; silver, gold and mapping tables in `DEV_DB`, or `PROD_DB` for `--target prod` |
+| 5 | Raw source is Fivetran; env-based databases | Raw source `fivetrandb.ukg_ready` set in `models/sources.yml`; silver, gold and mapping tables in `DEV_DB`, or `PROD_DB` for `--target prod` |
 | 6 | `_fivetran_synced` (timestamp_ntz) and `_fivetran_deleted` filter in silver | All 7 silver models; deleted rows are removed, `_fivetran_synced` is carried through |
 | 7 | Incremental gold models | `dim_hr_company` and `dim_hr_employee` (merge); `fact_payroll_workhours` and `fact_employee_salary_details` (delete+insert on new `employee_date_key`); watermark macro with a 1 hour lookback (`incremental_lookback_hours`) |
 | 8 | `staging/` subfolder | Silver staging models and their YAML moved to `models/silver/staging/`; renamed to `stg__ukg_ready__<source table>` |

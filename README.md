@@ -3,7 +3,7 @@
 Converts the compiled UKG Ready silver/gold SQL into a parameterised dbt project.
 
 ```
-raw (Fivetran: <FIVETRAN_DATABASE>.ukg_ready) ──► silver (SILVER.stg__ukg_ready__*) ──► gold (GOLD.dim_* / fact_*)
+raw (Fivetran: fivetrandb.ukg_ready) ──► silver (SILVER.stg__ukg_ready__*) ──► gold (GOLD.dim_* / fact_*)
 ```
 
 ## Setup
@@ -14,7 +14,7 @@ dbt deps
 dbt build
 ```
 Databases (see `dbt_project.yml`):
-- **Raw (Fivetran):** `FIVETRAN_DATABASE` [`FIVETRAN_DB`] and `FIVETRAN_UKG_SCHEMA` [`ukg_ready`] environment variables.
+- **Raw (Fivetran):** `fivetrandb.ukg_ready`, set in `models/sources.yml`.
 - **Silver / gold / mapping tables:** `DEV_DB` for any target except `prod`; `PROD_DB` when run with `--target prod`.
 
 ## Layout

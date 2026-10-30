@@ -3,8 +3,8 @@ version: 2
 sources:
   - name: ukg_ready
     description: Raw UKG Ready extracts landed in Snowflake.
-    database: "{{ var('raw_database') }}"
-    schema: "{{ var('raw_schema') }}"
+    database: fivetrandb
+    schema: ukg_ready
     tables:
       - name: COMPENSATION_HISTORY
       - name: COST_CENTERS_ORG

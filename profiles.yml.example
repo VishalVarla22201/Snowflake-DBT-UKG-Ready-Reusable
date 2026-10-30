@@ -1,7 +1,6 @@
 # Copy to ~/.dbt/profiles.yml (or set DBT_PROFILES_DIR) and fill in values.
 # Models are built into the database of the target (see +database in dbt_project.yml):
 #   dev  -> DEV_DB      prod -> PROD_DB
-# Raw Fivetran data is read from FIVETRAN_DATABASE / FIVETRAN_UKG_SCHEMA (see vars in dbt_project.yml).
 ukg_ready:
   target: dev
   outputs:
