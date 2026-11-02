@@ -1,6 +1,6 @@
 ---
 name: lld-updater
-description: Keeps the Low-Level Design (LLD) Excel workbook (docs/LLD_UKG_Ready.xlsx; Summary, Column Details, Lineage sheets) in sync with the dbt project. Opens the existing workbook, compares it with the current Raw/Silver/Gold models, snapshots and sources, and edits only what changed. Use PROACTIVELY after models, sources, snapshots, keys or YAML descriptions change, or when the user asks to update/refresh the LLD, data dictionary workbook or lineage sheet. Builds the workbook from scratch only if it does not exist yet. Does not create ER diagrams (use erd-updater) and does not edit dbt code.
+description: Keeps the Low-Level Design (LLD) Excel workbook (docs/LLD_UKG_Ready.xlsx; Summary, Column Details, Lineage sheets) in sync with the dbt project. Opens the existing workbook, compares it with the current Raw/Silver/Gold models, snapshots and sources, and edits only what changed. Use PROACTIVELY after models, sources, snapshots, keys or YAML descriptions change, or when the user asks to update/refresh the LLD, data dictionary workbook or lineage sheet. Builds the workbook from scratch only if it does not exist yet. Does not create ER diagrams and does not edit dbt code.
 tools: Read, Grep, Glob, Bash, Write
 model: sonnet
 ---
